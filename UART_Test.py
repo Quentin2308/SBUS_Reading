@@ -49,15 +49,16 @@ def sanity_check_packet(packet):
 
 print("---------------------------")
 
-serial = Serial("/dev/ttyS0", baudrate=9600, stopbits=2, parity="even")
+serial = Serial("/dev/ttyS0", baudrate=9600, stopbits=2, parity="odd")
 time.sleep(0.5)
-print("\nREAD BAUDRATE, stopbits=2, parity=odd: 9600\n")
+print("\nREAD BAUDRATE:9600, stopbits=2, parity=odd\n")
 for i in range (100):
     buf = serial.read(23, 2)
     b = bytearray(buf)
     packet = ba.bitarray(endian='big')
     packet.frombytes(b)
-    print(sanity_check_packet(packet))
+    print(packet)
+    #print(sanity_check_packet(packet))
 serial.close()
 
 print("---------------------------")
