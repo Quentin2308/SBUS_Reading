@@ -50,12 +50,12 @@ def sanity_check_packet(packet):
 print("---------------------------")
 isValid = False
 
-serial = Serial("/dev/ttyS0", baudrate=115200, parity="odd", stopbits=2)
-print("\nREAD BAUDRATE:115200 , stopbits=2, parity=odd\n")
+serial = Serial("/dev/ttyS0", baudrate=115200, parity="even", stopbits=2)
+print("\nREAD BAUDRATE:100000 , stopbits=2, parity=even\n")
 serial.flush()
 for i in range (5):
     print("SBUS PACKET START")
-    buf = serial.read(22, 2)
+    buf = serial.read(25, 2)
     packet = ba.bitarray(endian='big')
     packet.frombytes(buf)
     print(packet)
