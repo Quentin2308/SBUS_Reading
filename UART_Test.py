@@ -50,8 +50,8 @@ def sanity_check_packet(packet):
 print("---------------------------")
 isValid = False
 
-serial = Serial("/dev/ttyS0", baudrate=9600, stopbits=2, parity="odd")
-print("\nREAD BAUDRATE:9600, stopbits=2, parity=odd\n")
+serial = Serial("/dev/ttyS0", baudrate=115200)
+print("\nREAD BAUDRATE:115200 , stopbits=2, parity=odd\n")
 serial.flush()
 while not isValid:
     buf = serial.read(23, 2)
