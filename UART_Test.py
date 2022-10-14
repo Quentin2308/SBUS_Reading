@@ -29,12 +29,13 @@ def sanity_check_packet(packet):
     # SBus starts with an opening byte (0x0F), which we ignore
     # UART frames are 12 bits (see packet diagram above)
     # 22-bytes of data + 1 end byte with failsafe data
-
+    i = 0
     for packet_bits_ptr in range(_UART_FRAME_LENGTH, _UART_FRAME_LENGTH + 23 * _UART_FRAME_LENGTH, _UART_FRAME_LENGTH):
 
         # extract current UART frame
+        i++
         cur_UART_frame = packet[packet_bits_ptr:packet_bits_ptr + _UART_FRAME_LENGTH]
-        print(cur_UART_frame)
+        print(i, cur_UART_frame)
         continue
         # this "and" operation will result in 100000000000 in binary for correct frame - 2048 decimal
         if bau.ba2int(_UART_FRAME_CONFORMANCE_BITMASK & cur_UART_frame) != 2048:
