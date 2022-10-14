@@ -4,7 +4,7 @@ import threading
 import time
 
 import periphery
-from .test import ptest, pokay, passert, AssertRaises
+from test import ptest, pokay, passert, AssertRaises
 
 if sys.version_info[0] == 3:
     raw_input = input
