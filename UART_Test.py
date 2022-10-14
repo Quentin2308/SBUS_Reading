@@ -54,7 +54,7 @@ for i in range (10):
     buf = serial.read(23, 2)
     print("STOP READING\n")
     b = bytearray(buf)
-    packet = ba.bitarray(b)
+    packet = ba.frombytes(b)
     print(sanity_check_packet(packet))
 serial.close()
 
