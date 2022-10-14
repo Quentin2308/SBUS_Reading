@@ -53,11 +53,11 @@ isValid = False
 serial = Serial("/dev/ttyS0", baudrate=115200)
 print("\nREAD BAUDRATE:115200 , stopbits=2, parity=odd\n")
 serial.flush()
-while not isValid:
+for i in range (100):
     buf = serial.read(23, 2)
     packet = ba.bitarray(endian='big')
     packet.frombytes(buf)
-    isValid = sanity_check_packet(packet)[0]
+    print(sanity_check_packet(packet))
 serial.close()
 
 print("---------------------------")
