@@ -33,7 +33,7 @@ def sanity_check_packet(packet):
     for packet_bits_ptr in range(_UART_FRAME_LENGTH, _UART_FRAME_LENGTH + 23 * _UART_FRAME_LENGTH, _UART_FRAME_LENGTH):
 
         # extract current UART frame
-        i++
+        i += 1
         cur_UART_frame = packet[packet_bits_ptr:packet_bits_ptr + _UART_FRAME_LENGTH]
         print(i, cur_UART_frame)
         continue
