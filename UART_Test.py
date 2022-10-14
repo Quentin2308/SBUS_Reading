@@ -57,8 +57,9 @@ while not isValid[0]:
     buf = serial.read(24, 2)
     packet = ba.bitarray(endian='big')
     packet.frombytes(buf)
-    isValid = sanity_check_packet(packet)
-    print(isValid)
+    foo = sanity_check_packet(packet)
+    print(foo)
+    isValid = foo[0]
 serial.close()
 
 print("---------------------------")
