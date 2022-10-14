@@ -54,6 +54,7 @@ buf = serial.read(24, 2)
 packet = ba.bitarray(endian='big')
 packet.frombytes(buf)
 print(sanity_check_packet(packet))
+print(serial.baudrate,serial.parity, serial.stopbits)
 serial.close()
 
 print("---------------------------")
