@@ -145,19 +145,19 @@ class MonThread(threading.Thread):
     def __init__(self, path, gpio_pin):
         global _latest_complete_packet_timestamp
         threading.Thread.__init__(self)
-        # self.GPIO = GPIO(path, gpio_pin, "in", edge = "both")
+        self.GPIO = GPIO(path, gpio_pin, "in", edge = "both")
         # event = self.GPIO.read_event()
         _latest_complete_packet_timestamp = self.get_time()
 
     def run(self):
         # global _latest_complete_packet_timestamp
-        gpio = GPIO("/dev/gpiochip0", 22, "in", edge="both")
+        # gpio = GPIO("/dev/gpiochip0", 22, "in", edge="both")
         # _latest_complete_packet_timestamp = self.get_time()
         while not port_closed:
             # level = 2
             # _latest_complete_packet_timestamp = self.get_time()
             if gpio.poll(None):
-                read = gpio.read_event(None)
+                read = self.GPIO.read_event(None)
                 edge = read[0]
                 tick = read[1]/(10**3)
                 print(edge, gpio.read())
