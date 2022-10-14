@@ -89,7 +89,7 @@ def _sanity_check_packet(packet):
 
     return ret_val
 
-def _on_change(gpio,level,tick):
+def _on_change(level,tick):
     #pigpio calls this method whenever it detects a level change
     global _last_tick, \
         _working_packet, \
@@ -156,13 +156,11 @@ class MonThread(threading.Thread):
         while not port_closed:
             # level = 2
             # _latest_complete_packet_timestamp = self.get_time()
-            time.sleep(0.1)
             if gpio.poll(None):
-                read = gpio.read_event()
+                read = gpio.read_event(None)
                 edge = read[0]
                 tick = read[1]/(10**3)
                 print(edge, gpio.read())
-                tick = self.get_time()
                 if edge == "rising":
                     level = 1
                 else:
