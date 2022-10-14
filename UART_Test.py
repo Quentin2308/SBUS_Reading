@@ -34,7 +34,8 @@ def sanity_check_packet(packet):
 
         # extract current UART frame
         cur_UART_frame = packet[packet_bits_ptr:packet_bits_ptr + _UART_FRAME_LENGTH]
-
+        print(cur_UART_frame)
+        continue
         # this "and" operation will result in 100000000000 in binary for correct frame - 2048 decimal
         if bau.ba2int(_UART_FRAME_CONFORMANCE_BITMASK & cur_UART_frame) != 2048:
             return (
@@ -51,7 +52,7 @@ print("---------------------------")
 
 serial = Serial("/dev/ttyS0", baudrate=115200, parity="odd", stopbits=2)
 for i in range (10):
-    buf = serial.read(36, 2)
+    buf = serial.read(24)
     packet = ba.bitarray(endian='big')
     packet.frombytes(buf)
     print(sanity_check_packet(packet))
