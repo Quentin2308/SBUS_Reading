@@ -163,12 +163,12 @@ class MonThread(threading.Thread):
             # _latest_complete_packet_timestamp = self.get_time()
             time.sleep(0.1)
             if gpio.poll(None):
-                read = gpio.read()
-                # edge = read[0]
-                # tick = read[1]/(10**3)
+                read = gpio.read_event()
+                edge = read[0]
+                tick = read[1]/(10**3)
                 # print(edge, gpio.read())
                 tick = self.get_time()
-                if read:
+                if read == "rising":
                     level = 1
                 else:
                     level = 0
