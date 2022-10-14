@@ -190,11 +190,6 @@ def test_interactive():
     serial.close()
 
 
-if __name__ == "__main__":
-    if os.environ.get("CI") == "true":
-        test_arguments()
-        sys.exit(0)
-
     if len(sys.argv) < 2:
         print("Usage: python -m tests.test_serial <serial port device>")
         print("")
