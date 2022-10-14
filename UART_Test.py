@@ -48,15 +48,16 @@ def sanity_check_packet(packet):
     return ret_val
 
 print("---------------------------")
+isValid = False
 
 serial = Serial("/dev/ttyS0", baudrate=9600, stopbits=2, parity="odd")
 print("\nREAD BAUDRATE:9600, stopbits=2, parity=odd\n")
 serial.flush()
-for i in range (100):
+while isValid:
     buf = serial.read(15, 2)
     packet = ba.bitarray(endian='big')
     packet.frombytes(buf)
-    print(sanity_check_packet(packet))
+    isValid = sanity_check_packet(packet)
 serial.close()
 
 print("---------------------------")
