@@ -54,9 +54,8 @@ time.sleep(0.5)
 print("\nREAD BAUDRATE:9600, stopbits=2, parity=odd\n")
 for i in range (100):
     buf = serial.read(23, 2)
-    b = bytearray(buf)
     packet = ba.bitarray(endian='big')
-    packet.frombytes(b)
+    packet.frombytes(buf)
     print(sanity_check_packet(packet))
 serial.close()
 
