@@ -55,7 +55,7 @@ print("\nREAD BAUDRATE:100000 , stopbits=2, parity=even\n")
 serial.flush()
 for i in range (5):
     print("SBUS PACKET START")
-    buf = serial.read(25, 2)
+    buf = serial.read(24, 2)
     packet = ba.bitarray(endian='big')
     packet.frombytes(buf)
     print(packet)
