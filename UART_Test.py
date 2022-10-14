@@ -59,6 +59,7 @@ for i in range (5):
     packet = ba.bitarray(endian='big')
     packet_little = ba.bitarray(endian='little')
     packet.frombytes(buf)
+    packet_little.frombytes(buf)
 
     channel_bits =~ packet
     print(packet)
