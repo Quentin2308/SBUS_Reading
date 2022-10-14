@@ -50,14 +50,13 @@ def sanity_check_packet(packet):
 print("---------------------------")
 
 serial = Serial("/dev/ttyS0", baudrate=9600, stopbits=2, parity="odd")
-time.sleep(0.5)
 print("\nREAD BAUDRATE:9600, stopbits=2, parity=odd\n")
+serial.flush()
 for i in range (100):
-    buf = serial.read(16, 2)
+    buf = serial.read(15, 2)
     packet = ba.bitarray(endian='big')
     packet.frombytes(buf)
     print(sanity_check_packet(packet))
-serial.flush()
 serial.close()
 
 print("---------------------------")
