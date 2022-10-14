@@ -53,7 +53,7 @@ print("---------------------------")
 
 serial = Serial("/dev/ttyS0", baudrate=115200, parity="odd", stopbits=2)
 for i in range (10):
-    buf = serial.read(24)
+    buf = serial.read(16)
     packet = ba.bitarray(endian='big')
     print(len(buf), '', buf)
     packet.frombytes(buf)
