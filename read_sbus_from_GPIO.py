@@ -59,40 +59,38 @@ port_closed = False
 
 
 def _sanity_check_packet(packet):
-    # checks for data coherency for UART frames
-    # sbus is an *inverted* protocol
+    #checks for data coherency for UART frames
+    #sbus is an *inverted* protocol
 
-    # Returns 3 value tuple:
-    # 1 - Packet good? - True/False
-    # 2 - Error - None if no error, error message if packet is bad
-    # 3 - Data - None if no error, bad packet data if packet is bad
+    #Returns 3 value tuple:
+        # 1 - Packet good? - True/False
+        # 2 - Error - None if no error, error message if packet is bad
+        # 3 - Data - None if no error, bad packet data if packet is bad
 
-    ret_val = (True, None, None)
+    ret_val = (True,None,None)
 
-    # SBus starts with an opening byte (0x0F), which we ignore
-    # UART frames are 12 bits (see packet diagram above)
-    # 22-bytes of data + 1 end byte with failsafe data
+    #SBus starts with an opening byte (0x0F), which we ignore
+    #UART frames are 12 bits (see packet diagram above)
+    #22-bytes of data + 1 end byte with failsafe data
 
-    for packet_bits_ptr in range(_UART_FRAME_LENGTH, _UART_FRAME_LENGTH + 23 * _UART_FRAME_LENGTH, _UART_FRAME_LENGTH):
+    for packet_bits_ptr in range (_UART_FRAME_LENGTH,_UART_FRAME_LENGTH+23*_UART_FRAME_LENGTH,_UART_FRAME_LENGTH):
 
-        # extract current UART frame
-        cur_UART_frame = packet[packet_bits_ptr:packet_bits_ptr + _UART_FRAME_LENGTH]
+        #extract current UART frame
+        cur_UART_frame =  packet[packet_bits_ptr:packet_bits_ptr+_UART_FRAME_LENGTH]
 
-        # this "and" operation will result in 100000000000 in binary for correct frame - 2048 decimal
+        #this "and" operation will result in 100000000000 in binary for correct frame - 2048 decimal
         if bau.ba2int(_UART_FRAME_CONFORMANCE_BITMASK & cur_UART_frame) != 2048:
-            return (
-            False, f'UART start or stop bits bad (frame #{packet_bits_ptr / _UART_FRAME_LENGTH + 1})', cur_UART_frame)
+            return (False,f'UART start or stop bits bad (frame #{packet_bits_ptr/_UART_FRAME_LENGTH+1})', cur_UART_frame)
 
-        # parity bit in UART
+        #parity bit in UART
         if bau.parity(cur_UART_frame[1:9]) == cur_UART_frame[9]:
-            # due to inversion, parity checks fail when parity is equal
-            return (False, f'Parity check failure (frame #{packet_bits_ptr / _UART_FRAME_LENGTH + 1})', cur_UART_frame)
+            #due to inversion, parity checks fail when parity is equal
+            return (False,f'Parity check failure (frame #{packet_bits_ptr/_UART_FRAME_LENGTH+1})', cur_UART_frame )
 
     return ret_val
 
-
-def _on_change(level, tick):
-    # pigpio calls this method whenever it detects a level change
+def _on_change(gpio,level,tick):
+    #pigpio calls this method whenever it detects a level change
     global _last_tick, \
         _working_packet, \
         _working_packet_ptr, \
@@ -103,48 +101,45 @@ def _on_change(level, tick):
     time_elapsed = tick - _last_tick
 
     if time_elapsed < 0:
-        # the current tick wraps around once it exceeds 32-bit unsigned or 4294967295.
-        # PIGPIO docs says this happens about once every 71 minutes
-        # handle this case
-        time_elapsed = 18446744073709551616 - _last_tick + tick
+        #the current tick wraps around once it exceeds 32-bit unsigned or 4294967295.
+        #PIGPIO docs says this happens about once every 71 minutes
+        #handle this case
+        time_elapsed = 4294967295 - _last_tick + tick
 
     if time_elapsed >= _PACKET_BOUNDRY_TIME:
-        # if we are here then this method was triggered by the first "one" of this new packet
-        # and we have just completed a frame boundry
-        # print ( "time_elapsed = " , time_elapsed)
+        #if we are here then this method was triggered by the first "one" of this new packet
+        #and we have just completed a frame boundry
         print(_sanity_check_packet(_working_packet))
-
         if (_sanity_check_packet(_working_packet)[0]):
-            # only set _latest_complete_packet if it passes sanity check,
-            # otherwise leave old value there
+            #only set _latest_complete_packet if it passes sanity check,
+            #otherwise leave old value there
             _latest_complete_packet, _working_packet = _working_packet, _latest_complete_packet
             _latest_complete_packet_timestamp = tick
 
-            # SBus transmits transmission status in bits 279 and 280 (failsafe), high is connected
+            #SBus transmits transmission status in bits 279 and 280 (failsafe), high is connected
             _is_connected = bau.ba2int(_latest_complete_packet[279:281]) == 3
 
-        # reset working packet to accept the new packet data
+
+        #reset working packet to accept the new packet data
         _working_packet.setall(0)
         _working_packet_ptr = 0
 
-        # start timing to interpret next bit
+        #start timing to interpret next bit
         _last_tick = tick
         return
 
-    num_bits = round((
-                         time_elapsed) / 10)  # 10 microseconds per data bit, so number of bits since last state change is time difference/10
-    bit_val = bool(-level + 1)  # enter the level *before* this state change which is the inverse of current change.
+    num_bits = round((time_elapsed)/10) #10 microseconds per data bit, so number of bits since last state change is time difference/10
+    bit_val = bool(-level+1) #enter the level *before* this state change which is the inverse of current change.
 
-    # record number of bits at the level since the state changed
+    #record number of bits at the level since the state changed
 
-    # advance ptr to insert correct number of bits
-    new_working_packet_ptr = _working_packet_ptr + num_bits
+    #advance ptr to insert correct number of bits
+    new_working_packet_ptr = _working_packet_ptr+num_bits
     _working_packet[_working_packet_ptr:new_working_packet_ptr] = bit_val
     _working_packet_ptr = new_working_packet_ptr
 
-    # start timing to interpret next bit
+    #start timing to interpret next bit
     _last_tick = tick
-
 
 class MonThread(threading.Thread):
     def __init__(self, path, gpio_pin):
