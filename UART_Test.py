@@ -53,7 +53,7 @@ isValid = False
 serial = Serial("/dev/ttyS0", baudrate=115200, parity="odd", stopbits=2)
 print("\nREAD BAUDRATE:115200 , stopbits=2, parity=odd\n")
 serial.flush()
-for i in range (5):
+for i in range (100):
     print("SBUS PACKET START")
     buf = serial.read(24, 2)
     packet = ba.bitarray(endian='big')
