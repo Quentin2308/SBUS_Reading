@@ -57,8 +57,14 @@ for i in range (5):
     print("SBUS PACKET START")
     buf = serial.read(24, 2)
     packet = ba.bitarray(endian='big')
+    packet_little = ba.bitarray(endian='little')
     packet.frombytes(buf)
+
+    channel_bits =~ packet
     print(packet)
+    print(packet_little)
+    print(channel_bits)
+
     #print(sanity_check_packet(packet))
     print("SBUS PACKET END")
 serial.close()
