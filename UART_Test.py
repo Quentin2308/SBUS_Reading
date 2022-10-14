@@ -54,6 +54,7 @@ serial = Serial("/dev/ttyS0", baudrate=115200, parity="odd", stopbits=2)
 print("\nREAD BAUDRATE:115200 , stopbits=2, parity=odd\n")
 serial.flush()
 while not isValid:
+    time.sleep(0.1)
     buf = serial.read(24, 2)
     packet = ba.bitarray(endian='big')
     packet.frombytes(buf)
