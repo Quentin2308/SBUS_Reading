@@ -57,8 +57,7 @@ for i in range (100):
     b = bytearray(buf)
     packet = ba.bitarray(endian='big')
     packet.frombytes(b)
-    print(packet)
-    #print(sanity_check_packet(packet))
+    print(sanity_check_packet(packet))
 serial.close()
 
 print("---------------------------")
