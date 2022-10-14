@@ -50,7 +50,7 @@ def sanity_check_packet(packet):
 print("---------------------------")
 isValid = False
 
-serial = Serial("/dev/ttyS0", baudrate=115200)
+serial = Serial("/dev/ttyS0", baudrate=115200, parity="odd")
 print("\nREAD BAUDRATE:115200 , stopbits=2, parity=odd\n")
 serial.flush()
 for i in range (100):
