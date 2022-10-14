@@ -168,7 +168,7 @@ class MonThread(threading.Thread):
                 tick = read[1]/(10**3)
                 # print(edge, gpio.read())
                 tick = self.get_time()
-                if read == "rising":
+                if edge == "rising":
                     level = 1
                 else:
                     level = 0
