@@ -1,22 +1,15 @@
-
-'''Simplified reimplementation of the gpioget tool in Python.'''
-
 import gpiod
-import sys
 
-if __name__ == '__main__':
-    if len(sys.argv) < 3:
-        raise TypeError('usage: gpioget.py <gpiochip> <offset1> <offset2> ...')
+CONSUMER = "led-demo"
+chip = gpiod.Chip("/dev/gpiochip0", gpiod.Chip.OPEN_BY_NUMBER)
 
-    with gpiod.Chip(sys.argv[1]) as chip:
-        offsets = []
-        for off in sys.argv[2:]:
-            offsets.append(int(off))
+button = chip.get_line(22)  # pin 7
+button.request(consumer=CONSUMER, type=gpiod.LINE_REQ_DIR_IN)
 
-        lines = chip.get_lines(offsets)
-        lines.request(consumer=sys.argv[0], type=gpiod.LINE_REQ_DIR_IN)
-        vals = lines.get_values()
-
-        for val in vals:
-            print(val, end=' ')
-        print()
+try:
+  while True:
+    led.set_value(button.get_value())
+finally:
+  led.set_value(0)
+  led.release()
+  button.release()
