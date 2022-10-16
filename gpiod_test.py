@@ -6,14 +6,14 @@ import gpiod
 
 BUTTON_CHIP = 0
 BUTTON_LINE_OFFSET = 22
-BUTTON_EDGE = line_request.EVENT_BOTH_EDGES
+BUTTON_EDGE = gpiod.line_request.EVENT_BOTH_EDGES
 
 c = chip(BUTTON_CHIP)
 button = c.get_line(BUTTON_LINE_OFFSET)
 
-config = line_request()
+config = gpiod.line_request()
 config.consumer = "Button"
-config.request_type = BUTTON_EDGE
+config.request_type = gpiod.BUTTON_EDGE
 
 button.request(config)
 
