@@ -4,12 +4,11 @@ from datetime import timedelta
 import gpiod
 
 
-print(sys.argv[1])
 try:
-    if len(sys.argv) > 1:
-        BUTTON_CHIP = sys.argv[0]
-        BUTTON_LINE_OFFSET = int(sys.argv[1])
-        if len(sys.argv) > 2:
+    if len(sys.argv) > 2:
+        BUTTON_CHIP = sys.argv[1]
+        BUTTON_LINE_OFFSET = int(sys.argv[2])
+        if len(sys.argv) > 3:
             edge = sys.argv[2]
             if edge[0] == "r":
                 BUTTON_EDGE = line_request.EVENT_RISING_EDGE
