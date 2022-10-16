@@ -30,7 +30,7 @@ def sanity_check_packet(packet):
     # UART frames are 12 bits (see packet diagram above)
     # 22-bytes of data + 1 end byte with failsafe data
     i = 0
-    for packet_bits_ptr in range(0, _UART_FRAME_LENGTH + 23 * _UART_FRAME_LENGTH, _UART_FRAME_LENGTH):
+    for packet_bits_ptr in range(0, _UART_FRAME_LENGTH + 100 * _UART_FRAME_LENGTH, _UART_FRAME_LENGTH):
 
         # extract current UART frame
         cur_UART_frame = packet[packet_bits_ptr:packet_bits_ptr + _UART_FRAME_LENGTH]
@@ -53,7 +53,7 @@ print("---------------------------")
 
 serial = Serial("/dev/ttyS0", baudrate=115200, parity="odd", stopbits=2)
 serial.flush()
-buf = serial.read(100)
+buf = serial.read(150)
 packet = ba.bitarray(endian='big')
 print(len(buf), '', buf)
 packet.frombytes(buf)
