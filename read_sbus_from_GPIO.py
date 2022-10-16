@@ -166,14 +166,12 @@ class MonThread(threading.Thread):
                 if ev_lines:
                     for line in ev_lines:
                         event = line.event_read()
-                        print(event)
+                        print(event.type, gpiod.LineEvent.RISING_EDGE, gpiod.LineEvent.FALLING_EDGE)
                         tick = self.get_time()
                         if event.type == gpiod.LineEvent.RISING_EDGE:
                             level = 1
-                        elif event.type == gpiod.LineEvent.FALLING_EDGE:
-                            level = 0
                         else:
-                            raise TypeError('Invalid event type')
+                            level = 0
                         _on_change(level, tick)
             # _latest_complete_packet_timestamp = self.get_time()
             gpio.close()
