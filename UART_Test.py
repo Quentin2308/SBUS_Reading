@@ -52,6 +52,7 @@ def sanity_check_packet(packet):
 print("---------------------------")
 
 import gpiod
+from datetime import timedelta
 
 CONSUMER = "led-demo"
 chip = gpiod.Chip("0", gpiod.Chip.OPEN_BY_NUMBER)
