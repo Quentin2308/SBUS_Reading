@@ -53,13 +53,12 @@ print("---------------------------")
 
 serial = Serial("/dev/ttyS0", baudrate=115200, parity="odd", stopbits=2)
 serial.write(0)
-for i in range (10):
+for i in range (3):
     buf = serial.read(36)
     packet = ba.bitarray(endian='big')
     print(len(buf), '', buf)
     packet.frombytes(buf)
     print(sanity_check_packet(packet))
-    print(serial.baudrate,serial.parity, serial.stopbits)
 serial.close()
 
 print("---------------------------")
