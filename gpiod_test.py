@@ -6,7 +6,7 @@ import gpiod
 CONSUMER = "led-demo"
 chip = gpiod.Chip("0", gpiod.Chip.OPEN_BY_NUMBER)
 
-button = chip.get_line(13)  # pin 36
+button = chip.get_line(22)  # pin 7
 button.request(consumer=CONSUMER, type=gpiod.LINE_REQ_DIR_IN)
 
 while True:
