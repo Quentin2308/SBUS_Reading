@@ -58,7 +58,7 @@ packet = ba.bitarray(endian='big')
 packet.frombytes(buf)
 
 byte_list = []
-for byte in packet:
+for byte in buf:
     binary_representation = bin(byte)
     byte_list.append(binary_representation)
 print(byte_list)
