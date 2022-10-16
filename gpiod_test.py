@@ -3,7 +3,7 @@ import sys
 from datetime import timedelta
 import gpiod
 
-
+print(len(sys.argv))
 try:
     if len(sys.argv) > 2:
         BUTTON_CHIP = sys.argv[1]
