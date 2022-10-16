@@ -1,15 +1,22 @@
-# GPIO used PD30
+
+'''Simplified reimplementation of the gpioget tool in Python.'''
 
 import gpiod
-import time
+import sys
 
-chip = gpiod.Chip("/dev/gpiochip0")
-line = gpiod.find_line("22")
-lines = chip.get_lines([line.offset()])
-lines.request(consumer='foobar', type=gpiod.LINE_REQ_DIR_IN)
+if __name__ == '__main__':
+    if len(sys.argv) < 3:
+        raise TypeError('usage: gpioget.py <gpiochip> <offset1> <offset2> ...')
 
-while True:
-    print(lines.get_values())
-    time.sleep(1)
-    print(lines.get_values())
-    time.sleep(1)
+    with gpiod.Chip(sys.argv[1]) as chip:
+        offsets = []
+        for off in sys.argv[2:]:
+            offsets.append(int(off))
+
+        lines = chip.get_lines(offsets)
+        lines.request(consumer=sys.argv[0], type=gpiod.LINE_REQ_DIR_IN)
+        vals = lines.get_values()
+
+        for val in vals:
+            print(val, end=' ')
+        print()
