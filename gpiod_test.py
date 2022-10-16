@@ -40,9 +40,9 @@ if __name__ == '__main__':
         try:
             while True:
                 time.sleep(0.5)
-                ev_lines = line.event_wait(sec=1)
+                ev_lines = lines.event_wait(sec=1)
                 if ev_lines:
-                    event = line.event_read()
+                    event = lines.event_read()
                     print_event(event)
         except KeyboardInterrupt:
             sys.exit(130)
