@@ -11,6 +11,7 @@
 
 import gpiod
 import sys
+import time
 
 if __name__ == '__main__':
     def print_event(event):
@@ -38,10 +39,10 @@ if __name__ == '__main__':
 
         try:
             while True:
-                ev_lines = lines.event_wait(sec=1)
+                time.sleep(0.5)
+                ev_lines = line.event_wait(sec=1)
                 if ev_lines:
-                    for line in ev_lines:
-                        event = line.event_read()
-                        print_event(event)
+                    event = line.event_read()
+                    print_event(event)
         except KeyboardInterrupt:
             sys.exit(130)
