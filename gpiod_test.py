@@ -42,7 +42,8 @@ if __name__ == '__main__':
                 time.sleep(0.5)
                 ev_lines = lines.event_wait(sec=1)
                 if ev_lines:
-                    event = lines.event_read()
-                    print_event(event)
+                    for line in ev_lines:
+                        event = line.event_read()
+                        print_event(event)
         except KeyboardInterrupt:
             sys.exit(130)
