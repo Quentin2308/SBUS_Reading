@@ -106,14 +106,13 @@ def _on_change(level, tick):
         # the current tick wraps around once it exceeds 32-bit unsigned or 4294967295.
         # PIGPIO docs says this happens about once every 71 minutes
         # handle this case
-        time_elapsed = 18446744073709551616 - _last_tick + tick
+        time_elapsed = 4294967295 - _last_tick + tick
 
     if time_elapsed >= _PACKET_BOUNDRY_TIME:
         # if we are here then this method was triggered by the first "one" of this new packet
         # and we have just completed a frame boundry
-        # print ( "time_elapsed = " , time_elapsed)
-        print(_sanity_check_packet(_working_packet))
 
+        print(_sanity_check_packet(_working_packet))
         if (_sanity_check_packet(_working_packet)[0]):
             # only set _latest_complete_packet if it passes sanity check,
             # otherwise leave old value there
@@ -131,7 +130,8 @@ def _on_change(level, tick):
         _last_tick = tick
         return
 
-    num_bits = round((time_elapsed) / 10)  # 10 microseconds per data bit, so number of bits since last state change is time difference/10
+    num_bits = round((
+                         time_elapsed) / 10)  # 10 microseconds per data bit, so number of bits since last state change is time difference/10
     bit_val = bool(-level + 1)  # enter the level *before* this state change which is the inverse of current change.
 
     # record number of bits at the level since the state changed
@@ -143,8 +143,6 @@ def _on_change(level, tick):
 
     # start timing to interpret next bit
     _last_tick = tick
-
-
 class MonThread(threading.Thread):
     def __init__(self, path, gpio_pin):
         global _latest_complete_packet_timestamp
@@ -166,11 +164,10 @@ class MonThread(threading.Thread):
                 if ev_lines:
                     for line in ev_lines:
                         event = line.event_read()
-                        print(event.type, gpiod.LineEvent.RISING_EDGE, gpiod.LineEvent.FALLING_EDGE)
                         tick = self.get_time()
                         if event.type == gpiod.LineEvent.RISING_EDGE:
                             level = 1
-                        else:
+                        elif event.type == gpiod.LineEvent.FALLING_EDGE:
                             level = 0
                         _on_change(level, tick)
             # _latest_complete_packet_timestamp = self.get_time()
