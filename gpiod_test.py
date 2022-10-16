@@ -7,7 +7,7 @@ button = chip.get_line(22)  # pin 7
 button.request(consumer=CONSUMER, type=gpiod.LINE_REQ_DIR_IN)
 
 while True:
-    if button.event_wait(timedelta(seconds=10)):
+    if button.event_wait(10):
         # event_read() is blocking function.
         event = button.event_read()
         if event.event_type == line_event.RISING_EDGE:
