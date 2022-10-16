@@ -3,11 +3,21 @@ import sys
 from datetime import timedelta
 import gpiod
 
-CONSUMER = "led-demo"
-chip = gpiod.Chip("0", gpiod.Chip.OPEN_BY_NUMBER)
 
-button = chip.get_line(22)  # pin 7
-button.request(consumer=CONSUMER, type=gpiod.LINE_REQ_DIR_IN)
+BUTTON_CHIP = 0
+BUTTON_LINE_OFFSET = 22
+BUTTON_EDGE = line_request.EVENT_BOTH_EDGES
+
+c = chip(BUTTON_CHIP)
+button = c.get_line(BUTTON_LINE_OFFSET)
+
+config = line_request()
+config.consumer = "Button"
+config.request_type = BUTTON_EDGE
+
+button.request(config)
+
+print("event fd: ", button.event_get_fd())
 
 while True:
     if button.event_wait(10):
