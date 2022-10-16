@@ -1,7 +1,7 @@
 import gpiod
 
 CONSUMER = "led-demo"
-c = chip("/dev/gpiochip0")
+c = gpiod.chip("/dev/gpiochip0")
 button = c.get_line(22)
 button.request(consumer=CONSUMER, type=gpiod.LINE_REQ_DIR_IN)
 
