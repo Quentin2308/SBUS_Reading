@@ -30,7 +30,7 @@ def sanity_check_packet(packet):
     # UART frames are 12 bits (see packet diagram above)
     # 22-bytes of data + 1 end byte with failsafe data
     i = 0
-    for packet_bits_ptr in range(0, _UART_FRAME_LENGTH + 100 * _UART_FRAME_LENGTH, _UART_FRAME_LENGTH):
+    for packet_bits_ptr in range(0, _UART_FRAME_LENGTH + 23 * _UART_FRAME_LENGTH, _UART_FRAME_LENGTH):
 
         # extract current UART frame
         cur_UART_frame = packet[packet_bits_ptr:packet_bits_ptr + _UART_FRAME_LENGTH]
@@ -51,18 +51,21 @@ def sanity_check_packet(packet):
 
 print("---------------------------")
 
-serial = Serial("/dev/ttyS0", baudrate=115200, parity="odd", stopbits=2)
-serial.flush()
-buf = serial.read(23)
-packet = ba.bitarray(endian='big')
-packet.frombytes(buf)
+import gpiod
 
-byte_list = []
-for byte in buf:
-    binary_representation = bin(byte)
-    byte_list.append(binary_representation)
-print(byte_list)
+CONSUMER = "led-demo"
+chip = gpiod.Chip("0", gpiod.Chip.OPEN_BY_NUMBER)
 
-serial.close()
+sbus = chip.get_line(22)  # pin 07
+while True:
+    if sbus.event_wait(timedelta(seconds=10)):
+        # event_read() is blocking function.
+        event = button.event_read()
+        if event.event_type == line_event.RISING_EDGE:
+            print("rising: ", event.timestamp)
+        else:
+            print("falling: ", event.timestamp)
+    else:
+        print("timeout(10s)")
 
 print("---------------------------")
