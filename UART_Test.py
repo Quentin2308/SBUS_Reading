@@ -52,12 +52,11 @@ def sanity_check_packet(packet):
 print("---------------------------")
 
 serial = Serial("/dev/ttyS0", baudrate=115200, parity="odd", stopbits=2)
-for i in range (3):
-    buf = serial.read(36)
-    packet = ba.bitarray(endian='big')
-    print(len(buf), '', buf)
-    packet.frombytes(buf)
-    print(sanity_check_packet(packet))
+buf = serial.read(36)
+packet = ba.bitarray(endian='big')
+print(len(buf), '', buf)
+packet.frombytes(buf)
+print(sanity_check_packet(packet))
 serial.close()
 
 print("---------------------------")
