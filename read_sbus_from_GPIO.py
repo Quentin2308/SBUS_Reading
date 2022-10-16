@@ -155,10 +155,8 @@ class MonThread(threading.Thread):
         _latest_complete_packet_timestamp = self.get_time()
 
     def run(self):
-        with gpiod.Chip(sys.argv[1]) as chip:
-            offsets = []
-            for off in sys.argv[2:]:
-                offsets.append(int(off))
+        with gpiod.Chip("gpiochip0") as chip:
+            offsets = [22]
 
             lines = chip.get_lines(offsets)
             lines.request(consumer=sys.argv[0], type=gpiod.LINE_REQ_EV_BOTH_EDGES)
