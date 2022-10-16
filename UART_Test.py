@@ -56,11 +56,12 @@ serial.flush()
 buf = serial.read(23)
 packet = ba.bitarray(endian='big')
 packet.frombytes(buf)
-res = []
+
+byte_list = []
 for byte in packet:
-    binary_rep = bin(byte)  # convert to binary representation
-    res.append(binary_rep[2:])  # remove prefix "0b" and add to list
-print("0", ' '.join(res), "11")
+    binary_representation = bin(byte)
+    byte_list.append(binary_representation)
+print(byte_list)
 
 serial.close()
 
