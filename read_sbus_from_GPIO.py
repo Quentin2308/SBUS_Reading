@@ -101,7 +101,7 @@ def _on_change(level, tick):
         _is_connected
 
     time_elapsed = tick - _last_tick
-    print(time_elapsed)
+    #print(time_elapsed)
     if time_elapsed < 0:
         # the current tick wraps around once it exceeds 32-bit unsigned or 4294967295.
         # PIGPIO docs says this happens about once every 71 minutes
@@ -133,7 +133,7 @@ def _on_change(level, tick):
 
     num_bits = round((time_elapsed) / 10)  # 10 microseconds per data bit, so number of bits since last state change is time difference/10
     bit_val = bool(-level + 1)  # enter the level *before* this state change which is the inverse of current change.
-    print(level, bit_val, time_elapsed)
+    #print(level, bit_val, time_elapsed)
     # record number of bits at the level since the state changed
 
     # advance ptr to insert correct number of bits
@@ -166,7 +166,8 @@ class MonThread(threading.Thread):
                 if ev_lines:
                     for line in ev_lines:
                         event = line.event_read()
-                        tick = self.get_time()
+                        #tick = self.get_time()
+                        tick = event.timestamp
                         if event.type == gpiod.LineEvent.RISING_EDGE:
                             level = 1
                         elif event.type == gpiod.LineEvent.FALLING_EDGE:
