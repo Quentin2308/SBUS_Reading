@@ -167,7 +167,7 @@ class MonThread(threading.Thread):
                     for line in ev_lines:
                         event = line.event_read()
                         #tick = self.get_time()
-                        tick = event.timestamp
+                        tick = event.nsec/(10**3)
                         if event.type == gpiod.LineEvent.RISING_EDGE:
                             level = 1
                         elif event.type == gpiod.LineEvent.FALLING_EDGE:
