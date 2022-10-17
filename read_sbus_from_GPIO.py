@@ -133,7 +133,7 @@ def _on_change(level, tick):
 
     num_bits = round((time_elapsed) / 10)  # 10 microseconds per data bit, so number of bits since last state change is time difference/10
     bit_val = bool(-level + 1)  # enter the level *before* this state change which is the inverse of current change.
-
+    print(level, bit_val, time_elapsed)
     # record number of bits at the level since the state changed
 
     # advance ptr to insert correct number of bits
