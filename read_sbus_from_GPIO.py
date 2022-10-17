@@ -161,7 +161,7 @@ class MonThread(threading.Thread):
             lines.request(consumer=sys.argv[0], type=gpiod.LINE_REQ_EV_BOTH_EDGES)
 
             while not port_closed:
-                time.sleep(0.5)
+                #time.sleep(0.5)
                 ev_lines = lines.event_wait(sec=1)
                 if ev_lines:
                     for line in ev_lines:
